@@ -18,21 +18,21 @@ public class PostController {
     private PostService postService;
 
     //create post for a user
-    @PostMapping("/users/{userId}/posts")
+    @PostMapping("/users/{userId}/createPosts")
     public ResponseEntity<Post> createPost(@PathVariable Long userId, @RequestBody PostRequestDTO dto){
         Post newPost = postService.createPost(userId,dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newPost);
     }
 
     //get all post of a user
-    @GetMapping("/users/{userId}/posts")
+    @GetMapping("/users/{userId}/getUserPost")
     public ResponseEntity<List<Post>> getUserPost(@PathVariable Long userId){
         List<Post> posts = postService.getAllPostsOfUser(userId);
         return  ResponseEntity.ok(posts);
     }
 
     //get one post of a user
-    @GetMapping("/users/{userId}/posts/{postId}")
+    @GetMapping("/users/{userId}/getPostOfUser/{postId}")
     public ResponseEntity<Post> getPostOfUser(
             @PathVariable Long userId,
             @PathVariable Long postId) {
@@ -45,7 +45,7 @@ public class PostController {
 
 
     //update a post of a user
-    @PutMapping("/users/{userId}/posts/{postId}")
+    @PutMapping("/users/{userId}/updatePost/{postId}")
     public ResponseEntity<Post> updatePost(
             @PathVariable Long userId,
             @PathVariable Long postId,
@@ -59,7 +59,7 @@ public class PostController {
 
 
     //delete a post of a user
-    @DeleteMapping("/users/{userId}/posts/{postId}")
+    @DeleteMapping("/users/{userId}/deletePosts/{postId}")
     public ResponseEntity<String> deletePost(
             @PathVariable Long userId,
             @PathVariable Long postId) {
