@@ -55,23 +55,31 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post updateUserPost(Long userId, Long postId, PostUpdateDTO dto) {
         User existingUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("post not found"));
+        Post existingPost = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post does not belong to this user"));
         //verify ownership
-        if(!post.getUser().getId().equals(userId)){
+        if(!existingPost.getUser().getId().equals(existingUser.getId())){
             throw new RuntimeException("Post does not belongs to this user");
         }
 
         if(dto.getCaption()!=null){
-            existingUser.set
+            existingPost.setCaption(dto.getCaption());
         }
-        if(dto.getTitle()!=null){
-
+        if(dto.getPhotoUrl()!=null){
+            existingPost.setPhotoUrl(dto.getPhotoUrl());
         }
+        return postRepository.save(existingPost);
 
     }
 
     @Override
     public Post deleteUserPost(Long userId, Long postId) {
-        return null;
+
+        Post existingPost = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post Not found"));
+        //verify ownership
+        if(!existingPost.getUser().getId().equals(userId)){
+            throw new RuntimeException("Post does not belong to this user");
+        }
+        postRepository.delete(existingPost);
+        return existingPost;
     }
 }
